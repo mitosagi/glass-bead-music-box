@@ -66,15 +66,16 @@ class Scene extends React.Component<Object, ISceneState>  {
       Bodies.rectangle(-100, 300, 200, 600, set)
     ]);
 
-    set.isStatic = false
-    set.label = "ball"
+    const ballSet = Object.assign({}, set)
+    ballSet.isStatic = false
+    ballSet.label = "ball"
 
     //add balls
     World.add(engine.world, [
-      Bodies.circle(100, 100, 50, set),
-      Bodies.circle(200, 200, 60, set),
-      Bodies.circle(320, 320, 70, set),
-      Bodies.circle(450, 450, 80, set)
+      Bodies.circle(100, 100, 50, ballSet),
+      Bodies.circle(200, 200, 60, ballSet),
+      Bodies.circle(320, 320, 70, ballSet),
+      Bodies.circle(450, 450, 80, ballSet)
     ]);
 
     // add mouse control
@@ -100,11 +101,9 @@ class Scene extends React.Component<Object, ISceneState>  {
       }).chain(new Tone.Volume(-20), Tone.Destination)
 
     Matter.Events.on(engine, 'collisionStart', (event) => {
-      [event.pairs.find(pair => pair.bodyA.label.includes("ball") && pair.bodyB.label.includes("ball"))]
-        .map(_ =>
-          this.state.chord[Math.floor(Math.random() * this.state.chord.length)]
-            .map(note =>
-              synth.triggerAttackRelease(note, "1n")))
+      if (event.pairs.find(pair => pair.bodyA.label.includes("ball") && pair.bodyB.label.includes("ball")) !== undefined)
+        this.state.chord[Math.floor(Math.random() * this.state.chord.length)]
+          .map(note => synth.triggerAttackRelease(note, "1n"))
     })
 
     Engine.run(engine)
