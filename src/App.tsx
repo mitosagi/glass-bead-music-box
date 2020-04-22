@@ -95,7 +95,7 @@ class Scene extends React.Component {
       }, {
         // @ts-ignore
         baseUrl: "./"
-      }).chain(new Tone.Volume(-16), Tone.Destination)
+      }).chain(new Tone.Volume(-20), Tone.Destination)
     this.tick()
     setInterval(
       () => this.tick(),
