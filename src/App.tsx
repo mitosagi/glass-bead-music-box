@@ -19,12 +19,17 @@ interface ISceneState {
 }
 
 class Scene extends React.Component<Object, ISceneState>  {
+  private sceneRef: React.RefObject<HTMLDivElement>;
+
   constructor(props: Readonly<{}>) {
     super(props);
     this.state = { chord: [["C3", "C4", "C5"]], pos: 0 };
+    this.sceneRef = React.createRef();
   }
 
   componentDidMount() {
+    if (this.sceneRef.current === null) throw new Error("sceneRef.current === null");
+
     const Engine = Matter.Engine,
       Render = Matter.Render,
       World = Matter.World,
@@ -39,7 +44,7 @@ class Scene extends React.Component<Object, ISceneState>  {
     engine.world.gravity.y = 0;
 
     const render = Render.create({
-      element: this.refs.scene as HTMLElement,
+      element: this.sceneRef.current,
       engine: engine,
       options: {
         width: 600,
@@ -135,7 +140,7 @@ class Scene extends React.Component<Object, ISceneState>  {
   }
 
   render() {
-    return <div ref="scene" />;
+    return <div ref={this.sceneRef} />;
   }
 }
 
